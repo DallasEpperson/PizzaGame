@@ -28,7 +28,7 @@ class GameObject {
     }
 
     async doBehaviorEvent(map) {
-        if (map.isCutscenePlaying || this.behaviorLoop.length === 0){return;}
+        if (map.isCutscenePlaying || this.behaviorLoop.length === 0 || this.isStanding){return;}
 
         let eventConfig = this.behaviorLoop[this.behaviorLoopIndex];
         eventConfig.who = this.id;
