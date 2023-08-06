@@ -9,7 +9,7 @@ class OverworldMap {
         this.upperImage = new Image();
         this.upperImage.src = config.upperSrc;
 
-        this.isCutscenePlaying = true;
+        this.isCutscenePlaying = false;
     }
 
     drawLowerImage(ctx, cameraPerson) {
@@ -54,6 +54,17 @@ class OverworldMap {
         Object.values(this.gameObjects).forEach(object => object.doBehaviorEvent(this));
     }
 
+    checkForActionCutscene() {
+        const hero = this.gameObjects["hero"];
+        const nextCoords = utils.nextPosition(hero.x, hero.y, hero.direction);
+        const match = Object.values(this.gameObjects).find(o => {
+            return `${o.x},${o.y}` === `${nextCoords.x},${nextCoords.y}`;
+        });
+        if (!this.isCutscenePlaying && match && match.talking.length){
+            this.startCutscene(match.talking[0].events);
+        }
+    }
+
     addWall(x,y) {
         this.walls[`${x},${y}`] = true;
     }
@@ -88,6 +99,14 @@ window.OverworldMaps = {
                     { type: "stand", direction: "up", time: 800},
                     { type: "stand", direction: "right", time: 1200},
                     { type: "stand", direction: "up", time: 300}
+                ],
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "I'm busy...", faceHero: "npcA"},
+                            { type: "textMessage", text: "Go away!"}
+                        ]
+                    }
                 ]
             }),
             npcB: new Person({
