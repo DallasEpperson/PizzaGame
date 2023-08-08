@@ -1,5 +1,6 @@
 class OverworldMap {
     constructor(config) {
+        this.overworld = null;
         this.gameObjects = config.gameObjects;
         this.cutsceneSpaces = config.cutsceneSpaces || {};
         this.walls = config.walls || {};
@@ -149,6 +150,13 @@ window.OverworldMaps = {
                         { who: "hero", type: "walk", direction: "left"},
                     ]
                 }
+            ],
+            [utils.asGridCoord(5,10)]: [
+                {
+                    events: [
+                        { type: "changeMap", map: "Kitchen"}
+                    ]
+                }
             ]
         }
     },
@@ -156,19 +164,22 @@ window.OverworldMaps = {
         lowerSrc: "/images/maps/KitchenLower.png",
         upperSrc: "/images/maps/KitchenUpper.png",
         gameObjects: {
-            hero: new GameObject({
-                x: utils.withGrid(3),
+            hero: new Person({
+                isPlayerControlled: true,
+                x: utils.withGrid(5),
                 y: utils.withGrid(5)
             }),
-            npcA: new GameObject({
-                x: utils.withGrid(9),
-                y: utils.withGrid(6),
-                src: "/images/characters/people/npc2.png"
-            }),
-            npcB: new GameObject({
+            npcB: new Person({
                 x: utils.withGrid(10),
                 y: utils.withGrid(8),
-                src: "/images/characters/people/npc3.png"
+                src: "/images/characters/people/npc3.png",
+                talking: [
+                    {
+                        events: [
+                            { type: "textMessage", text: "You made it!", faceHero:["npcB"]}
+                        ]
+                    }
+                ]
             })
         }
     }
